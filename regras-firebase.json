@@ -1,0 +1,80 @@
+{
+  "rules": {
+    "campanhas": {
+      "$cid": {
+        "meta": {
+          ".read": "auth != null",
+          ".write": "auth != null && (!data.exists() || data.child('criador').val() == auth.uid)"
+        },
+        "membros": {
+          "$uid": {
+            ".read": "auth != null && (auth.uid == $uid || root.child('campanhas').child($cid).child('membros').child(auth.uid).exists())",
+            ".write": "auth != null && auth.uid == $uid && (newData.child('papel').val() == 'jogador' || root.child('campanhas').child($cid).child('meta').child('criador').val() == auth.uid)"
+          }
+        },
+        "fichas": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'",
+          "$pk": {
+            ".read": "auth != null && (data.child('uid').val() == auth.uid || root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre')",
+            ".write": "auth != null && (root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre' || (newData.child('uid').val() == auth.uid && (!data.exists() || data.child('uid').val() == auth.uid)))"
+          }
+        },
+        "rolagens": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists()",
+          "$rid": {
+            ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists() && newData.child('uid').val() == auth.uid"
+          }
+        },
+        "pdmsPrivados": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'",
+          "$pid": {
+            ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
+          }
+        },
+        "pdmsPublicos": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists()",
+          "$pid": {
+            ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
+          }
+        },
+        "combates": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists()",
+          "$id": {
+            ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'",
+            "acoes": {
+              "$aid": {
+                ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists() && newData.child('uid').val() == auth.uid"
+              }
+            }
+          }
+        },
+        "combatesPrivados": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'",
+          "$id": {
+            ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
+          }
+        },
+        "mapas": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'",
+          "$mid": {
+            ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
+          }
+        },
+        "cena": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists()",
+          ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
+        },
+        "acontecimentos": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists()",
+          "$aid": {
+            ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
+          }
+        },
+        "config": {
+          ".read": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).exists()",
+          ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
+        }
+      }
+    }
+  }
+}
