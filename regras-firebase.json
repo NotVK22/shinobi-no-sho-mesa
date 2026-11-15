@@ -75,6 +75,10 @@
           ".write": "auth != null && root.child('campanhas').child($cid).child('membros').child(auth.uid).child('papel').val() == 'mestre'"
         }
       }
+    },
+    "doacoes": {
+      ".read": true,
+      ".write": false
     }
   }
 }
